@@ -17,7 +17,7 @@ public class NewMonoBehaviourScript : MonoBehaviour
             output += i + " ";
         }
 
-        Debug.Log(output);
+        //Debug.Log(output);
 
         // Task
         while (variable1 != variable2)
@@ -35,7 +35,7 @@ public class NewMonoBehaviourScript : MonoBehaviour
             }
         }
 
-        Debug.Log(incrementNo + " increments were made to variable1 to reach variable2.");
+        //Debug.Log(incrementNo + " increments were made to variable1 to reach variable2.");
     }
 
     // Update is called once per frame
