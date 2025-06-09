@@ -6,8 +6,9 @@ public class ASG1_PlayerBehaviour : MonoBehaviour
     int currentHealth = 100;
     bool isDead = false;
 
+    int hazardDamage = 20; // Damage taken from hazards
     float lastHazardTime = 0f;
-    float hazardCooldown = 0.5f; // Damage once every second
+    float hazardCooldown = 0.2f; // Damage once every second
 
     Vector3 playerSpawn;
 
@@ -156,7 +157,7 @@ public class ASG1_PlayerBehaviour : MonoBehaviour
         {
             if (Time.time - lastHazardTime >= hazardCooldown)
             {
-                currentHealth -= 20;
+                currentHealth -= hazardDamage;
                 lastHazardTime = Time.time;
 
                 if (currentHealth <= 0)
@@ -165,8 +166,11 @@ public class ASG1_PlayerBehaviour : MonoBehaviour
                     isDead = true;
                     Debug.Log("You died.");
 
-                    TeleportToSpawn();
-                    
+                    if (isDead)
+                    {
+                        TeleportToSpawn();
+                    }
+  
                     currentHealth = maxHealth;
                     isDead = false;
                 }

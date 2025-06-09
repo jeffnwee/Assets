@@ -11,11 +11,14 @@ public class ASG1_CoinBehaviour : MonoBehaviour
     Renderer[] renderers;
     Material[] originalMaterials;
 
+    [SerializeField]
+    AudioClip collectSound;
+
     void Start()
     {
         // Get all Renderer components in this GameObject and its children
         renderers = GetComponentsInChildren<Renderer>();
-        originalMaterials = new Material[renderers.Length];
+        originalMaterials = new Material[renderers.Length];   
 
         for (int i = 0; i < renderers.Length; i++)
         {
@@ -41,6 +44,7 @@ public class ASG1_CoinBehaviour : MonoBehaviour
 
     public void Collect(ASG1_PlayerBehaviour player)
     {
+        AudioSource.PlayClipAtPoint(collectSound, transform.position);
         player.ModifyScore(coinValue);
         Destroy(gameObject);
     }
