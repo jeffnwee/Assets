@@ -81,21 +81,14 @@ public class ASG1_PlayerBehaviour : MonoBehaviour
 
     void OnCollisionEnter(Collision collision)
     {
-        // if (collision.gameObject.CompareTag("Hazard"))
-        // {
-        //     currentHealth -= 20;
-        //     if (currentHealth < 0)
-        //     {
-        //         currentHealth = 0;
-        //         isDead = true;
-        //         //Debug.Log("Player has died.");
-        //     }
-        //     else
-        //     {
-        //         Debug.Log("-1 health. Current health: " + currentHealth);
-        //     }
-        // }
+        if (collision.gameObject.CompareTag("HazardBall"))
+        {
+            Debug.Log("You died.");
+            TeleportToSpawn();
+            currentHealth = maxHealth;
+        }
     }
+
     void OnCollisionStay(Collision collision)
     {
         if (collision.gameObject.CompareTag("HealingArea"))
@@ -155,6 +148,8 @@ public class ASG1_PlayerBehaviour : MonoBehaviour
     {
         if (other.CompareTag("Hazard"))
         {
+
+
             if (Time.time - lastHazardTime >= hazardCooldown)
             {
                 currentHealth -= hazardDamage;
@@ -170,7 +165,7 @@ public class ASG1_PlayerBehaviour : MonoBehaviour
                     {
                         TeleportToSpawn();
                     }
-  
+
                     currentHealth = maxHealth;
                     isDead = false;
                 }
