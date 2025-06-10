@@ -2,6 +2,8 @@ using UnityEngine;
 
 public class ASG1_PlayerBehaviour : MonoBehaviour
 {
+    public int deathCount = 0;
+    public float startTime = 0f;
     int maxHealth = 100;
     int currentHealth = 100;
     bool isDead = false;
@@ -14,6 +16,7 @@ public class ASG1_PlayerBehaviour : MonoBehaviour
 
     bool canInteract = false;
     public int score = 0;
+    public int wrenchCount = 0;
 
     [SerializeField]
     GameObject projectile;
@@ -35,8 +38,10 @@ public class ASG1_PlayerBehaviour : MonoBehaviour
     ASG1_Keycard currentKeycard;
     public bool hasGun = false;
     ASG1_GunBehaviour currentGun;
-    public bool hasWrench = false;
     ASG1_Wrench currentWrench;
+    public bool powerBoxFixed = false;
+    ASG1_PowerBox currentPowerBox;
+    ASG1_ExitDoor currentExitDoor;
 
     CharacterController characterController;
     Rigidbody rb;
@@ -46,6 +51,7 @@ public class ASG1_PlayerBehaviour : MonoBehaviour
         playerSpawn = transform.position;
         characterController = GetComponent<CharacterController>();
         rb = GetComponent<Rigidbody>();
+        startTime = Time.time;
     }
 
     void TeleportToSpawn()
@@ -77,6 +83,7 @@ public class ASG1_PlayerBehaviour : MonoBehaviour
             ASG1_Keycard keycard = hitInfo.collider.gameObject.GetComponentInParent<ASG1_Keycard>();
             ASG1_GunBehaviour gun = hitInfo.collider.gameObject.GetComponentInParent<ASG1_GunBehaviour>();
             ASG1_Wrench wrench = hitInfo.collider.gameObject.GetComponentInParent<ASG1_Wrench>();
+            ASG1_PowerBox powerBox = hitInfo.collider.gameObject.GetComponentInParent<ASG1_PowerBox>();
 
             if (coin != null)
             {
@@ -144,6 +151,35 @@ public class ASG1_PlayerBehaviour : MonoBehaviour
                 canInteract = true;
                 currentWrench.Highlight();
             }
+            else if (powerBox != null)
+            {
+                if (currentPowerBox != null && currentPowerBox != powerBox)
+                    currentPowerBox.Unhighlight();
+
+                currentPowerBox = powerBox;
+                if (currentCoin != null)
+                {
+                    currentCoin.Unhighlight();
+                    currentCoin = null;
+                }
+                if (currentKeycard != null)
+                {
+                    currentKeycard.Unhighlight();
+                    currentKeycard = null;
+                }
+                if (currentGun != null)
+                {
+                    currentGun.Unhighlight();
+                    currentGun = null;
+                }
+                if (currentWrench != null)
+                {
+                    currentWrench.Unhighlight();
+                    currentWrench = null;
+                }
+                canInteract = true;
+                currentPowerBox.Highlight();
+            }
         }
         else
         {
@@ -167,6 +203,11 @@ public class ASG1_PlayerBehaviour : MonoBehaviour
                 currentWrench.Unhighlight();
                 currentWrench = null;
             }
+            if (currentPowerBox != null)
+            {
+                currentPowerBox.Unhighlight();
+                currentPowerBox = null;
+            }
         }
     }
 
@@ -175,24 +216,14 @@ public class ASG1_PlayerBehaviour : MonoBehaviour
         if (collision.gameObject.CompareTag("HazardBall"))
         {
             Debug.Log("You died.");
-            TeleportToSpawn();
+            isDead = true;
+            deathCount++;
+            if (isDead)
+            {
+                TeleportToSpawn();
+            }
             currentHealth = maxHealth;
-        }
-    }
-
-    void OnCollisionStay(Collision collision)
-    {
-        if (collision.gameObject.CompareTag("HealingArea"))
-        {
-            currentHealth += 1;
-            if (currentHealth > maxHealth)
-            {
-                currentHealth = maxHealth;
-            }
-            else
-            {
-                //Debug.Log("+1 health. Current health: " + currentHealth);
-            }
+            isDead = false;
         }
     }
 
@@ -239,13 +270,21 @@ public class ASG1_PlayerBehaviour : MonoBehaviour
                 //Debug.Log("Interacting with wrench");
                 currentWrench.Collect(this);
             }
+            else if (currentPowerBox != null)
+            {
+                currentPowerBox.Interact();
+            }
+            else if (currentExitDoor != null)
+            {
+                currentExitDoor.Interact();
+            }
         }
     }
 
     public void ModifyScore(int amount)
     {
         score += amount;
-        Debug.Log("Evidence: " + score);
+        Debug.Log("Evidence collected: " + score);
     }
 
     public void CollectKeycard()
@@ -260,19 +299,18 @@ public class ASG1_PlayerBehaviour : MonoBehaviour
         Debug.Log("Gun collected!");
     }
 
-    public void CollectWrench()
+    public void CollectWrench(int wrenchAmount)
     {
-        hasWrench = true;
-        Debug.Log("Wrench collected!");
+        wrenchCount += wrenchAmount;
+        Debug.Log("Wrench collected: " + wrenchCount);
     }
 
     void OnTriggerEnter(Collider other)
     {
-        if (other.CompareTag("Collectible"))
+        if (other.CompareTag("ExitDoor"))
         {
-            //Debug.Log("Player is looking at " + other.gameObject.name);
-            //currentCoin = other.gameObject.GetComponent<CoinBehaviour>();
-            //canInteract = true;
+            canInteract = true;
+            currentExitDoor = other.gameObject.GetComponent<ASG1_ExitDoor>();
         }
 
         else if (other.CompareTag("Door"))
@@ -309,6 +347,7 @@ public class ASG1_PlayerBehaviour : MonoBehaviour
                 {
                     currentHealth = 0;
                     isDead = true;
+                    deathCount++;
                     Debug.Log("You died.");
 
                     if (isDead)
@@ -318,10 +357,6 @@ public class ASG1_PlayerBehaviour : MonoBehaviour
 
                     currentHealth = maxHealth;
                     isDead = false;
-                }
-                else
-                {
-                    Debug.Log("-1 health. Current health: " + currentHealth);
                 }
             }
         }
@@ -351,8 +386,13 @@ public class ASG1_PlayerBehaviour : MonoBehaviour
             {
                 currentWrench.Unhighlight();
                 currentWrench = null;
-            }
+            }      
+        }
         
+        else if (other.CompareTag("ExitDoor"))
+        {
+            currentExitDoor = null;
+            canInteract = false;
         }
 
         else if (other.CompareTag("Door"))

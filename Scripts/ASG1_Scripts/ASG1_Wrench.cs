@@ -3,6 +3,9 @@ using UnityEngine;
 public class ASG1_Wrench : MonoBehaviour
 {
     [SerializeField]
+    public int wrenchValue = 1;
+
+    [SerializeField]
     Material highlightMaterial;
 
     Renderer[] renderers;
@@ -42,7 +45,7 @@ public class ASG1_Wrench : MonoBehaviour
     public void Collect(ASG1_PlayerBehaviour player)
     {
         AudioSource.PlayClipAtPoint(collectSound, transform.position);
-        player.CollectWrench();
+        player.CollectWrench(wrenchValue);
         Destroy(gameObject);
     }
 }
