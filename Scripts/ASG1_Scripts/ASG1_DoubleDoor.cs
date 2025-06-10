@@ -22,6 +22,8 @@ public class ASG1_DoubleDoor : MonoBehaviour
     private Vector3 leftDoorClosedRotation;
     private Vector3 rightDoorClosedRotation;
 
+    public ASG1_PlayerBehaviour playerBehaviour;
+
     public void Start()
     {
         audioSource = GetComponent<AudioSource>();
@@ -33,13 +35,20 @@ public class ASG1_DoubleDoor : MonoBehaviour
     {
         if (isOpen) return;
 
-        Vector3 doorPos = transform.position;
-        Vector3 playerPos = player.position;
+        if (playerBehaviour != null && playerBehaviour.hasKeycard)
+        {
+            Vector3 doorPos = transform.position;
+            Vector3 playerPos = player.position;
 
-        if (playerPos.x < doorPos.x)
-            OpenDoors(90, -90);
+            if (playerPos.x < doorPos.x)
+                OpenDoors(90, -90);
+            else
+                OpenDoors(-90, 90);
+        }
         else
-            OpenDoors(-90, 90);
+        {
+            Debug.Log("You need a keycard to open this door.");
+        }
     }
 
     void OpenDoors(float leftAngle, float rightAngle)

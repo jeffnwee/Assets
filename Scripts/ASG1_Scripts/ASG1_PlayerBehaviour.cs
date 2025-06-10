@@ -15,7 +15,11 @@ public class ASG1_PlayerBehaviour : MonoBehaviour
     bool canInteract = false;
     public int score = 0;
 
-    public bool hasKeycard = false;
+    [SerializeField]
+    GameObject projectile;
+
+    [SerializeField]
+    float fireStrength = 0f;
 
     [SerializeField]
     Transform spawnPoint;
@@ -27,6 +31,12 @@ public class ASG1_PlayerBehaviour : MonoBehaviour
     ASG1_DoorBehaviour currentDoor;
     ASG1_DoubleDoor currentDoubleDoor;
     ASG1_StairsDoor currentStairsDoor;
+    public bool hasKeycard = false;
+    ASG1_Keycard currentKeycard;
+    public bool hasGun = false;
+    ASG1_GunBehaviour currentGun;
+    public bool hasWrench = false;
+    ASG1_Wrench currentWrench;
 
     CharacterController characterController;
     Rigidbody rb;
@@ -63,14 +73,77 @@ public class ASG1_PlayerBehaviour : MonoBehaviour
         if (Physics.Raycast(spawnPoint.position, spawnPoint.forward, out hitInfo, interactionDistance) &&
             hitInfo.collider.gameObject.CompareTag("Collectible"))
         {
-            if (currentCoin != null && currentCoin != hitInfo.collider.gameObject.GetComponentInParent<ASG1_CoinBehaviour>())
-            {
-                currentCoin.Unhighlight();
-            }
+            ASG1_CoinBehaviour coin = hitInfo.collider.gameObject.GetComponentInParent<ASG1_CoinBehaviour>();
+            ASG1_Keycard keycard = hitInfo.collider.gameObject.GetComponentInParent<ASG1_Keycard>();
+            ASG1_GunBehaviour gun = hitInfo.collider.gameObject.GetComponentInParent<ASG1_GunBehaviour>();
+            ASG1_Wrench wrench = hitInfo.collider.gameObject.GetComponentInParent<ASG1_Wrench>();
 
-            currentCoin = hitInfo.collider.gameObject.GetComponentInParent<ASG1_CoinBehaviour>();
-            canInteract = true;
-            currentCoin.Highlight();
+            if (coin != null)
+            {
+                if (currentCoin != null && currentCoin != coin)
+                    currentCoin.Unhighlight();
+
+                currentCoin = coin;
+                if (currentKeycard != null)
+                {
+                    currentKeycard.Unhighlight();
+                    currentKeycard = null;
+                }
+                canInteract = true;
+                currentCoin.Highlight();
+            }
+            else if (keycard != null)
+            {
+                if (currentKeycard != null && currentKeycard != keycard)
+                    currentKeycard.Unhighlight();
+
+                currentKeycard = keycard;
+                if (currentCoin != null)
+                {
+                    currentCoin.Unhighlight();
+                    currentCoin = null;
+                }
+                canInteract = true;
+                currentKeycard.Highlight();
+            }
+            else if (gun != null)
+            {
+                if (currentGun != null && currentGun != gun)
+                    currentGun.Unhighlight();
+
+                currentGun = gun;
+                if (currentCoin != null)
+                {
+                    currentCoin.Unhighlight();
+                    currentCoin = null;
+                }
+                if (currentKeycard != null)
+                {
+                    currentKeycard.Unhighlight();
+                    currentKeycard = null;
+                }
+                canInteract = true;
+                currentGun.Highlight();
+            }
+            else if (wrench != null)
+            {
+                if (currentWrench != null && currentWrench != wrench)
+                    currentWrench.Unhighlight();
+
+                currentWrench = wrench;
+                if (currentCoin != null)
+                {
+                    currentCoin.Unhighlight();
+                    currentCoin = null;
+                }
+                if (currentKeycard != null)
+                {
+                    currentKeycard.Unhighlight();
+                    currentKeycard = null;
+                }
+                canInteract = true;
+                currentWrench.Highlight();
+            }
         }
         else
         {
@@ -78,7 +151,21 @@ public class ASG1_PlayerBehaviour : MonoBehaviour
             {
                 currentCoin.Unhighlight();
                 currentCoin = null;
-                canInteract = false;
+            }
+            if (currentKeycard != null)
+            {
+                currentKeycard.Unhighlight();
+                currentKeycard = null;
+            }
+            if (currentGun != null)
+            {
+                currentGun.Unhighlight();
+                currentGun = null;
+            }
+            if (currentWrench != null)
+            {
+                currentWrench.Unhighlight();
+                currentWrench = null;
             }
         }
     }
@@ -135,6 +222,23 @@ public class ASG1_PlayerBehaviour : MonoBehaviour
                 //Debug.Log("Interacting with stairs door");
                 currentStairsDoor.Interact();
             }
+
+            else if (currentKeycard != null)
+            {
+                //Debug.Log("Interacting with keycard");
+                currentKeycard.Collect(this);
+            }
+
+            else if (currentGun != null)
+            {
+                //Debug.Log("Interacting with gun");
+                currentGun.Collect(this);
+            }
+            else if (currentWrench != null)
+            {
+                //Debug.Log("Interacting with wrench");
+                currentWrench.Collect(this);
+            }
         }
     }
 
@@ -147,7 +251,19 @@ public class ASG1_PlayerBehaviour : MonoBehaviour
     public void CollectKeycard()
     {
         hasKeycard = true;
-        Debug.Log("Keycard found!");
+        Debug.Log("Keycard collected!");
+    }
+
+    public void CollectGun()
+    {
+        hasGun = true;
+        Debug.Log("Gun collected!");
+    }
+
+    public void CollectWrench()
+    {
+        hasWrench = true;
+        Debug.Log("Wrench collected!");
     }
 
     void OnTriggerEnter(Collider other)
@@ -216,9 +332,27 @@ public class ASG1_PlayerBehaviour : MonoBehaviour
     {
         if (other.CompareTag("Collectible"))
         {
-            //Debug.Log("Player is no longer looking at " + other.gameObject.name);
-            currentCoin = null;
-            canInteract = false;
+            if (currentCoin != null)
+            {
+                currentCoin.Unhighlight();
+                currentCoin = null;
+            }
+            if (currentKeycard != null)
+            {
+                currentKeycard.Unhighlight();
+                currentKeycard = null;
+            }
+            if (currentGun != null)
+            {
+                currentGun.Unhighlight();
+                currentGun = null;
+            }
+            if (currentWrench != null)
+            {
+                currentWrench.Unhighlight();
+                currentWrench = null;
+            }
+        
         }
 
         else if (other.CompareTag("Door"))
@@ -248,5 +382,17 @@ public class ASG1_PlayerBehaviour : MonoBehaviour
             currentStairsDoor = null;
             canInteract = false;
         }
+    }
+
+    void OnFire()
+    {
+        if (!hasGun)
+            return;
+
+        GameObject newProjectile = Instantiate(projectile, spawnPoint.position, spawnPoint.rotation);
+        Vector3 fireForce = spawnPoint.forward * fireStrength;
+        newProjectile.GetComponent<Rigidbody>().AddForce(fireForce);
+
+        Destroy(newProjectile, 2.5f);
     }
 }
