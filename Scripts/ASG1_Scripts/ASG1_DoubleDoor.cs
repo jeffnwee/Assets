@@ -1,0 +1,63 @@
+using UnityEngine;
+
+public class ASG1_DoubleDoor : MonoBehaviour
+{
+    public bool isOpen = false;
+    public Transform player;
+
+    [SerializeField]
+    private Transform leftDoor;
+
+    [SerializeField]
+    private Transform rightDoor;
+
+    [SerializeField]
+    private AudioClip doorOpenSound;
+
+    [SerializeField]
+    private AudioClip doorCloseSound;
+
+    private AudioSource audioSource;
+
+    private Vector3 leftDoorClosedRotation;
+    private Vector3 rightDoorClosedRotation;
+
+    public void Start()
+    {
+        audioSource = GetComponent<AudioSource>();
+        leftDoorClosedRotation = leftDoor.localEulerAngles;
+        rightDoorClosedRotation = rightDoor.localEulerAngles;
+    }
+
+    public void Interact()
+    {
+        if (isOpen) return;
+
+        Vector3 doorPos = transform.position;
+        Vector3 playerPos = player.position;
+
+        if (playerPos.x < doorPos.x)
+            OpenDoors(90, -90);
+        else
+            OpenDoors(-90, 90);
+    }
+
+    void OpenDoors(float leftAngle, float rightAngle)
+    {
+        leftDoor.localEulerAngles = leftDoorClosedRotation + new Vector3(0, leftAngle, 0);
+        rightDoor.localEulerAngles = rightDoorClosedRotation + new Vector3(0, rightAngle, 0);
+        isOpen = true;
+        audioSource.clip = doorOpenSound;
+        audioSource.Play();
+    }
+
+    public void CloseDoors()
+    {
+        if (!isOpen) return;
+        leftDoor.localEulerAngles = leftDoorClosedRotation;
+        rightDoor.localEulerAngles = rightDoorClosedRotation;
+        isOpen = false;
+        audioSource.clip = doorCloseSound;
+        audioSource.Play();
+    }
+}

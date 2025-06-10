@@ -15,6 +15,8 @@ public class ASG1_PlayerBehaviour : MonoBehaviour
     bool canInteract = false;
     public int score = 0;
 
+    public bool hasKeycard = false;
+
     [SerializeField]
     Transform spawnPoint;
 
@@ -23,6 +25,8 @@ public class ASG1_PlayerBehaviour : MonoBehaviour
 
     ASG1_CoinBehaviour currentCoin;
     ASG1_DoorBehaviour currentDoor;
+    ASG1_DoubleDoor currentDoubleDoor;
+    ASG1_StairsDoor currentStairsDoor;
 
     CharacterController characterController;
     Rigidbody rb;
@@ -119,6 +123,18 @@ public class ASG1_PlayerBehaviour : MonoBehaviour
                 //Debug.Log("Interacting with door");
                 currentDoor.Interact();
             }
+
+            else if (currentDoubleDoor != null)
+            {
+                //Debug.Log("Interacting with double door");
+                currentDoubleDoor.Interact();
+            }
+
+            else if (currentStairsDoor != null)
+            {
+                //Debug.Log("Interacting with stairs door");
+                currentStairsDoor.Interact();
+            }
         }
     }
 
@@ -126,6 +142,12 @@ public class ASG1_PlayerBehaviour : MonoBehaviour
     {
         score += amount;
         Debug.Log("Evidence: " + score);
+    }
+
+    public void CollectKeycard()
+    {
+        hasKeycard = true;
+        Debug.Log("Keycard found!");
     }
 
     void OnTriggerEnter(Collider other)
@@ -141,6 +163,18 @@ public class ASG1_PlayerBehaviour : MonoBehaviour
         {
             canInteract = true;
             currentDoor = other.gameObject.GetComponent<ASG1_DoorBehaviour>();
+        }
+
+        else if (other.CompareTag("DoubleDoor"))
+        {
+            canInteract = true;
+            currentDoubleDoor = other.gameObject.GetComponentInParent<ASG1_DoubleDoor>();
+        }
+
+        else if (other.CompareTag("StairsDoor"))
+        {
+            canInteract = true;
+            currentStairsDoor = other.gameObject.GetComponentInParent<ASG1_StairsDoor>();
         }
     }
 
@@ -190,6 +224,28 @@ public class ASG1_PlayerBehaviour : MonoBehaviour
         else if (other.CompareTag("Door"))
         {
             currentDoor = null;
+            canInteract = false;
+        }
+
+        else if (other.CompareTag("DoubleDoor"))
+        {
+            // Close the door when leaving
+            if (currentDoubleDoor != null && currentDoubleDoor.isOpen)
+            {
+                currentDoubleDoor.CloseDoors();
+            }
+            currentDoubleDoor = null;
+            canInteract = false;
+        }
+
+        else if (other.CompareTag("StairsDoor"))
+        {
+            // Close the door when leaving
+            if (currentStairsDoor != null && currentStairsDoor.isOpen)
+            {
+                currentStairsDoor.CloseDoors();
+            }
+            currentStairsDoor = null;
             canInteract = false;
         }
     }

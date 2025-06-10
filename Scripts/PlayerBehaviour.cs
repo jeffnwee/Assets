@@ -4,7 +4,7 @@ public class PlayerBehaviour : MonoBehaviour
 {
     int maxHealth = 100;
     int currentHealth = 100;
-    bool isDead = false;
+    //bool isDead = false;
 
     bool canInteract = false;
     public int score = 0;
@@ -59,7 +59,7 @@ public class PlayerBehaviour : MonoBehaviour
             if (currentHealth < 0)
             {
                 currentHealth = 0;
-                isDead = true;
+                //isDead = true;
                 //Debug.Log("Player has died.");
             }
             else

@@ -3,7 +3,7 @@ using UnityEngine;
 public class ASG1_Float : MonoBehaviour
 {
     [SerializeField] float floatSpeed = 1f;
-    [SerializeField] float floatHeight = 0.5f;
+    [SerializeField] float floatHeight = 0.25f;
     [SerializeField] float rotationSpeed = 50f;
 
     Vector3 startPos;
