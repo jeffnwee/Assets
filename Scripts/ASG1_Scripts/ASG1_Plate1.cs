@@ -2,15 +2,42 @@ using UnityEngine;
 
 public class ASG1_Plate1 : MonoBehaviour
 {
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
+    public bool plate1Pressed = false;
+    public ASG1_GunDoor gunDoor;
+
+    [SerializeField]
+    Material pressedMaterial;
+
+    Material originalMaterial;
+
     void Start()
     {
-        
+        originalMaterial = GetComponent<Renderer>().material;
     }
 
-    // Update is called once per frame
-    void Update()
+    private void OnTriggerEnter(Collider other)
     {
-        
+        if (other.CompareTag("Crates"))
+        {
+            plate1Pressed = true;
+            GetComponent<Renderer>().material = pressedMaterial;
+            if (gunDoor != null)
+            {
+                gunDoor.CheckPlates();
+            }
+        }
+    }
+
+    private void OnTriggerExit(Collider other)
+    {
+        if (other.CompareTag("Crates"))
+        {
+            plate1Pressed = false;
+            GetComponent<Renderer>().material = originalMaterial;
+            if (gunDoor != null)
+            {
+                gunDoor.CheckPlates();
+            }
+        }
     }
 }

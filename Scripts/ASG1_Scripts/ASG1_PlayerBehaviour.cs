@@ -88,6 +88,8 @@ public class ASG1_PlayerBehaviour : MonoBehaviour
     ASG1_PowerBox currentPowerBox;
     ASG1_ExitDoor currentExitDoor;
 
+    ASG1_GunDoor currentGunDoor;
+
     CharacterController characterController;
     Rigidbody rb;
 
@@ -337,6 +339,11 @@ public class ASG1_PlayerBehaviour : MonoBehaviour
                 currentExitDoor.Interact();
                 interactText.gameObject.SetActive(false);
             }
+            else if (currentGunDoor != null)
+            {
+                currentGunDoor.Interact();
+                interactText.gameObject.SetActive(false);
+            }
         }
     }
 
@@ -426,6 +433,12 @@ public class ASG1_PlayerBehaviour : MonoBehaviour
         {
             canInteract = true;
             currentStairsDoor = other.gameObject.GetComponentInParent<ASG1_StairsDoor>();
+            interactText.gameObject.SetActive(true);
+        }
+        else if (other.CompareTag("GunDoor"))
+        {
+            canInteract = true;
+            currentGunDoor = other.gameObject.GetComponent<ASG1_GunDoor>();
             interactText.gameObject.SetActive(true);
         }
     }
@@ -527,6 +540,12 @@ public class ASG1_PlayerBehaviour : MonoBehaviour
                 currentStairsDoor.CloseDoors();
             }
             currentStairsDoor = null;
+            canInteract = false;
+            interactText.gameObject.SetActive(false);
+        }
+        else if (other.CompareTag("GunDoor"))
+        {
+            currentGunDoor = null;
             canInteract = false;
             interactText.gameObject.SetActive(false);
         }
