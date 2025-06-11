@@ -1,8 +1,25 @@
 using UnityEngine;
+using TMPro;
+using UnityEngine.UI;
 
 public class ASG1_ExitDoor : MonoBehaviour
 {
     public ASG1_PlayerBehaviour player;
+
+    [SerializeField]
+    TextMeshProUGUI exitText;
+
+    [SerializeField]
+    TextMeshProUGUI deathCountText;
+
+    [SerializeField]
+    TextMeshProUGUI timeTakenText;
+
+    [SerializeField]
+    Image exitBackground;
+
+    [SerializeField]
+    TextMeshProUGUI exitFailText;
 
     public void Interact()
     {
@@ -11,14 +28,30 @@ public class ASG1_ExitDoor : MonoBehaviour
             if (player.powerBoxFixed)
             {
                 float totalTime = Time.time - player.startTime;
-                Debug.Log("You have successfully escaped the research laboratory!");
-                Debug.Log("Total Deaths = " + player.deathCount);
-                Debug.Log("Total Time Taken = " + totalTime.ToString("F2") + " seconds");
+                int totalSeconds = (int)totalTime;
+
+                int minutes = totalSeconds / 60;
+                int seconds = totalSeconds % 60;
+                string formattedTime = minutes + ":" + seconds.ToString("D2");
+
+                deathCountText.text = "Total Deaths: " + player.deathCount;
+                timeTakenText.text = "Time Taken: " + formattedTime;
+                
+                exitText.gameObject.SetActive(true);
+                deathCountText.gameObject.SetActive(true);
+                timeTakenText.gameObject.SetActive(true);
+                exitBackground.gameObject.SetActive(true);
             }
             else
             {
-                Debug.Log("You need to fix the power box before escaping!");
+                exitFailText.gameObject.SetActive(true);
+                Invoke("HideExitFailText", 2f);
             }
         }
+    }
+
+    private void HideExitFailText()
+    {
+        exitFailText.gameObject.SetActive(false);
     }
 }

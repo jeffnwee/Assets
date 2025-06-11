@@ -1,7 +1,11 @@
 using UnityEngine;
+using TMPro;
 
 public class ASG1_DoubleDoor : MonoBehaviour
 {
+    [SerializeField]
+    TextMeshProUGUI doubleDoorText;
+
     public bool isOpen = false;
     public Transform player;
 
@@ -47,8 +51,14 @@ public class ASG1_DoubleDoor : MonoBehaviour
         }
         else
         {
-            Debug.Log("You need a keycard to open this door.");
+            doubleDoorText.gameObject.SetActive(true);
+            Invoke("HideDoubleDoorText", 2.5f);
         }
+    }
+
+    private void HideDoubleDoorText()
+    {
+        doubleDoorText.gameObject.SetActive(false);
     }
 
     void OpenDoors(float leftAngle, float rightAngle)

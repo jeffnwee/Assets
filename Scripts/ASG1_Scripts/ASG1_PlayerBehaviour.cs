@@ -1,7 +1,52 @@
 using UnityEngine;
+using TMPro;
+using UnityEngine.UI;
 
 public class ASG1_PlayerBehaviour : MonoBehaviour
 {
+    [SerializeField]
+    TextMeshProUGUI evidenceCountText;
+
+    [SerializeField]
+    TextMeshProUGUI interactText;
+
+    [SerializeField]
+    TextMeshProUGUI enoughEvidenceText;
+
+    [SerializeField]
+    TextMeshProUGUI keycardCollectedText;
+
+    [SerializeField]
+    TextMeshProUGUI gunCollectedText;
+
+    [SerializeField]
+    TextMeshProUGUI collectibleInteractText;
+
+    [SerializeField]
+    TextMeshProUGUI wrenchCountText;
+
+    [SerializeField]
+    Image evidenceBackground;
+
+    [SerializeField]
+    Image wrenchBackground;
+
+    [SerializeField]
+    TextMeshProUGUI keycardText;
+
+    [SerializeField]
+    Image keycardBackground;
+
+    [SerializeField]
+    TextMeshProUGUI gunText;
+
+    [SerializeField]
+    Image gunBackground;
+
+    [SerializeField]
+    TextMeshProUGUI deathText;
+
+
     public int deathCount = 0;
     public float startTime = 0f;
     int maxHealth = 100;
@@ -52,6 +97,9 @@ public class ASG1_PlayerBehaviour : MonoBehaviour
         characterController = GetComponent<CharacterController>();
         rb = GetComponent<Rigidbody>();
         startTime = Time.time;
+
+        evidenceCountText.text = "Evidence Collected: " + score.ToString();
+        wrenchCountText.text = "Wrench Collected: " + wrenchCount.ToString();
     }
 
     void TeleportToSpawn()
@@ -180,6 +228,11 @@ public class ASG1_PlayerBehaviour : MonoBehaviour
                 canInteract = true;
                 currentPowerBox.Highlight();
             }
+            if (!currentPowerBox)
+            {
+                collectibleInteractText.gameObject.SetActive(true);
+            }
+            
         }
         else
         {
@@ -208,6 +261,7 @@ public class ASG1_PlayerBehaviour : MonoBehaviour
                 currentPowerBox.Unhighlight();
                 currentPowerBox = null;
             }
+            collectibleInteractText.gameObject.SetActive(false);
         }
     }
 
@@ -240,18 +294,21 @@ public class ASG1_PlayerBehaviour : MonoBehaviour
             {
                 //Debug.Log("Interacting with door");
                 currentDoor.Interact();
+                interactText.gameObject.SetActive(false);
             }
 
             else if (currentDoubleDoor != null)
             {
                 //Debug.Log("Interacting with double door");
                 currentDoubleDoor.Interact();
+                interactText.gameObject.SetActive(false);
             }
 
             else if (currentStairsDoor != null)
             {
                 //Debug.Log("Interacting with stairs door");
                 currentStairsDoor.Interact();
+                interactText.gameObject.SetActive(false);
             }
 
             else if (currentKeycard != null)
@@ -273,10 +330,12 @@ public class ASG1_PlayerBehaviour : MonoBehaviour
             else if (currentPowerBox != null)
             {
                 currentPowerBox.Interact();
+                interactText.gameObject.SetActive(false);
             }
             else if (currentExitDoor != null)
             {
                 currentExitDoor.Interact();
+                interactText.gameObject.SetActive(false);
             }
         }
     }
@@ -284,25 +343,60 @@ public class ASG1_PlayerBehaviour : MonoBehaviour
     public void ModifyScore(int amount)
     {
         score += amount;
-        Debug.Log("Evidence collected: " + score);
+        evidenceCountText.text = "Evidence Collected: " + score.ToString();
+
+        if (score >= 5)
+        {
+            enoughEvidenceText.gameObject.SetActive(true);
+            Invoke("HideEnoughEvidenceText", 4f);
+            evidenceCountText.gameObject.SetActive(false);
+            evidenceBackground.gameObject.SetActive(false);
+
+            keycardText.gameObject.SetActive(true);
+            keycardBackground.gameObject.SetActive(true);
+        }
+    }
+    void HideEnoughEvidenceText()
+    {
+        enoughEvidenceText.gameObject.SetActive(false);
     }
 
     public void CollectKeycard()
     {
         hasKeycard = true;
-        Debug.Log("Keycard collected!");
+        keycardCollectedText.gameObject.SetActive(true);
+        Invoke("HideKeycardCollectedText", 3f);
+        keycardText.gameObject.SetActive(false);
+        keycardBackground.gameObject.SetActive(false);
+        gunText.gameObject.SetActive(true);
+        gunBackground.gameObject.SetActive(true);
+    }
+
+    void HideKeycardCollectedText()
+    {
+        keycardCollectedText.gameObject.SetActive(false);
     }
 
     public void CollectGun()
     {
         hasGun = true;
-        Debug.Log("Gun collected!");
+        gunCollectedText.gameObject.SetActive(true);
+        Invoke("HideGunCollectedText", 4f);
+        gunText.gameObject.SetActive(false);
+        gunBackground.gameObject.SetActive(false);
+        wrenchCountText.gameObject.SetActive(true);
+        wrenchBackground.gameObject.SetActive(true);
+    }
+
+    void HideGunCollectedText()
+    {
+        gunCollectedText.gameObject.SetActive(false);
     }
 
     public void CollectWrench(int wrenchAmount)
     {
         wrenchCount += wrenchAmount;
-        Debug.Log("Wrench collected: " + wrenchCount);
+        wrenchCountText.text = "Wrench Collected: " + wrenchCount.ToString();
     }
 
     void OnTriggerEnter(Collider other)
@@ -311,24 +405,28 @@ public class ASG1_PlayerBehaviour : MonoBehaviour
         {
             canInteract = true;
             currentExitDoor = other.gameObject.GetComponent<ASG1_ExitDoor>();
+            interactText.gameObject.SetActive(true);
         }
 
         else if (other.CompareTag("Door"))
         {
             canInteract = true;
             currentDoor = other.gameObject.GetComponent<ASG1_DoorBehaviour>();
+            interactText.gameObject.SetActive(true);
         }
 
         else if (other.CompareTag("DoubleDoor"))
         {
             canInteract = true;
             currentDoubleDoor = other.gameObject.GetComponentInParent<ASG1_DoubleDoor>();
+            interactText.gameObject.SetActive(true);
         }
 
         else if (other.CompareTag("StairsDoor"))
         {
             canInteract = true;
             currentStairsDoor = other.gameObject.GetComponentInParent<ASG1_StairsDoor>();
+            interactText.gameObject.SetActive(true);
         }
     }
 
@@ -348,7 +446,8 @@ public class ASG1_PlayerBehaviour : MonoBehaviour
                     currentHealth = 0;
                     isDead = true;
                     deathCount++;
-                    Debug.Log("You died.");
+                    deathText.gameObject.SetActive(true);
+                    Invoke("HideDeathText", 2f);
 
                     if (isDead)
                     {
@@ -360,6 +459,11 @@ public class ASG1_PlayerBehaviour : MonoBehaviour
                 }
             }
         }
+    }
+
+    void HideDeathText()
+    {
+        deathText.gameObject.SetActive(false);
     }
 
 
@@ -386,19 +490,21 @@ public class ASG1_PlayerBehaviour : MonoBehaviour
             {
                 currentWrench.Unhighlight();
                 currentWrench = null;
-            }      
+            }
         }
-        
+
         else if (other.CompareTag("ExitDoor"))
         {
             currentExitDoor = null;
             canInteract = false;
+            interactText.gameObject.SetActive(false);
         }
 
         else if (other.CompareTag("Door"))
         {
             currentDoor = null;
             canInteract = false;
+            interactText.gameObject.SetActive(false);
         }
 
         else if (other.CompareTag("DoubleDoor"))
@@ -410,6 +516,7 @@ public class ASG1_PlayerBehaviour : MonoBehaviour
             }
             currentDoubleDoor = null;
             canInteract = false;
+            interactText.gameObject.SetActive(false);
         }
 
         else if (other.CompareTag("StairsDoor"))
@@ -421,6 +528,7 @@ public class ASG1_PlayerBehaviour : MonoBehaviour
             }
             currentStairsDoor = null;
             canInteract = false;
+            interactText.gameObject.SetActive(false);
         }
     }
 
@@ -433,6 +541,6 @@ public class ASG1_PlayerBehaviour : MonoBehaviour
         Vector3 fireForce = spawnPoint.forward * fireStrength;
         newProjectile.GetComponent<Rigidbody>().AddForce(fireForce);
 
-        Destroy(newProjectile, 2.5f);
+        Destroy(newProjectile, 2f);
     }
 }

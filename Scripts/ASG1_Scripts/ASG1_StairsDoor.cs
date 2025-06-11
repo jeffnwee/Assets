@@ -1,7 +1,12 @@
 using UnityEngine;
+using TMPro;
 
 public class ASG1_StairsDoor : MonoBehaviour
 {
+    
+    [SerializeField]
+    TextMeshProUGUI doubleDoorText;
+    
     public bool isOpen = false;
     public Transform player;
 
@@ -48,8 +53,14 @@ public class ASG1_StairsDoor : MonoBehaviour
 
         else
         {
-            Debug.Log("You need to collect all 5 evidence to open this door.");
+            doubleDoorText.gameObject.SetActive(true);
+            Invoke("HideDoubleDoorText", 3f);
         }
+    }
+
+    private void HideDoubleDoorText()
+    {
+        doubleDoorText.gameObject.SetActive(false);
     }
 
     void OpenDoors(float leftAngle, float rightAngle)

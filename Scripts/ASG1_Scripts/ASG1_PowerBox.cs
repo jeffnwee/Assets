@@ -1,4 +1,5 @@
 using UnityEngine;
+using TMPro;
 
 public class ASG1_PowerBox : MonoBehaviour
 {
@@ -13,6 +14,16 @@ public class ASG1_PowerBox : MonoBehaviour
     [SerializeField]
     AudioClip fixSound;
 
+    [SerializeField]
+    TextMeshProUGUI powerBoxFixed;
+
+    [SerializeField]
+    TextMeshProUGUI powerBoxNotFixed;
+
+    [SerializeField]
+    TextMeshProUGUI powerBoxAlreadyFixed;
+
+
     void Start()
     {
         // Get all Renderer components in this GameObject and its children
@@ -23,7 +34,7 @@ public class ASG1_PowerBox : MonoBehaviour
         {
             originalMaterials[i] = renderers[i].material;
         }
-        
+
     }
 
     public void Highlight()
@@ -48,15 +59,33 @@ public class ASG1_PowerBox : MonoBehaviour
         {
             AudioSource.PlayClipAtPoint(fixSound, transform.position);
             player.powerBoxFixed = true;
-            Debug.Log("Power box fixed!");
+            powerBoxFixed.gameObject.SetActive(true);
+            Invoke("HidePowerBoxFixedText", 2f);
         }
         else if (player != null && player.wrenchCount < 3)
         {
-            Debug.Log("You need 3 wrenches to fix the power box.");
+            powerBoxNotFixed.gameObject.SetActive(true);
+            Invoke("HidePowerBoxNotFixedText", 3f);
         }
         else if (player != null && player.powerBoxFixed)
         {
-            Debug.Log("Power box is already fixed.");
+            powerBoxAlreadyFixed.gameObject.SetActive(true);
+            Invoke("HidePowerBoxAlreadyFixedText", 2.5f);
         }
+    }
+
+    private void HidePowerBoxFixedText()
+    {
+        powerBoxFixed.gameObject.SetActive(false);
+    }
+
+    private void HidePowerBoxNotFixedText()
+    {
+        powerBoxNotFixed.gameObject.SetActive(false);
+    }
+
+    private void HidePowerBoxAlreadyFixedText()
+    {
+        powerBoxAlreadyFixed.gameObject.SetActive(false);
     }
 }
