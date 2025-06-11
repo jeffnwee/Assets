@@ -4,6 +4,7 @@ public class ASG1_Plate2 : MonoBehaviour
 {
     public bool plate2Pressed = false;
     public ASG1_GunDoor gunDoor;
+    public ASG1_OutdoorTrigger outdoorTrigger;
 
     [SerializeField]
     Material pressedMaterial;
@@ -25,6 +26,10 @@ public class ASG1_Plate2 : MonoBehaviour
             {
                 gunDoor.CheckPlates();
             }
+            if (outdoorTrigger != null)
+            {
+                outdoorTrigger.CheckPlatesAndHideHint();
+            }
         }
     }
 
@@ -37,6 +42,10 @@ public class ASG1_Plate2 : MonoBehaviour
             if (gunDoor != null)
             {
                 gunDoor.CheckPlates();
+            }
+            if (outdoorTrigger != null)
+            {
+                outdoorTrigger.CheckPlatesAndHideHint();
             }
         }
     }

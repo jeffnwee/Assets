@@ -89,6 +89,7 @@ public class ASG1_PlayerBehaviour : MonoBehaviour
     ASG1_ExitDoor currentExitDoor;
 
     ASG1_GunDoor currentGunDoor;
+    public ASG1_StairsTrigger stairsTrigger;
 
     CharacterController characterController;
     Rigidbody rb;
@@ -271,7 +272,8 @@ public class ASG1_PlayerBehaviour : MonoBehaviour
     {
         if (collision.gameObject.CompareTag("HazardBall"))
         {
-            Debug.Log("You died.");
+            deathText.gameObject.SetActive(true);
+            Invoke("HideDeathText", 2f);
             isDead = true;
             deathCount++;
             if (isDead)
@@ -377,6 +379,11 @@ public class ASG1_PlayerBehaviour : MonoBehaviour
         keycardBackground.gameObject.SetActive(false);
         gunText.gameObject.SetActive(true);
         gunBackground.gameObject.SetActive(true);
+
+        if (stairsTrigger != null)
+        {
+            stairsTrigger.CheckForKeycard();
+        }
     }
 
     void HideKeycardCollectedText()
