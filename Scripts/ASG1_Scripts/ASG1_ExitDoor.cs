@@ -20,13 +20,33 @@ public class ASG1_ExitDoor : MonoBehaviour
 
     [SerializeField]
     TextMeshProUGUI exitFailText;
+    
+    [SerializeField]
+    AudioSource bgmAudioSource;
 
+    [SerializeField]
+    AudioClip victorySound;
+
+    AudioSource audioSource;
+
+    void Start()
+    {
+        audioSource = GetComponent<AudioSource>();
+    }
     public void Interact()
     {
         if (player != null)
         {
             if (player.powerBoxFixed)
             {
+                if (bgmAudioSource != null)
+                {
+                    bgmAudioSource.Stop();
+                }
+
+                audioSource.clip = victorySound;
+                audioSource.Play();
+
                 float totalTime = Time.time - player.startTime;
                 int totalSeconds = (int)totalTime;
 
@@ -36,7 +56,7 @@ public class ASG1_ExitDoor : MonoBehaviour
 
                 deathCountText.text = "Total Deaths: " + player.deathCount;
                 timeTakenText.text = "Time Taken: " + formattedTime;
-                
+
                 exitText.gameObject.SetActive(true);
                 deathCountText.gameObject.SetActive(true);
                 timeTakenText.gameObject.SetActive(true);

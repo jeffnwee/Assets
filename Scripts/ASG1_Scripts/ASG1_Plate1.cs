@@ -11,9 +11,14 @@ public class ASG1_Plate1 : MonoBehaviour
 
     Material originalMaterial;
 
+    [SerializeField]
+    private AudioClip platePressSound;
+    private AudioSource audioSource;
+
     void Start()
     {
         originalMaterial = GetComponent<Renderer>().material;
+        audioSource = GetComponent<AudioSource>();
     }
 
     private void OnTriggerEnter(Collider other)
@@ -22,6 +27,9 @@ public class ASG1_Plate1 : MonoBehaviour
         {
             plate1Pressed = true;
             GetComponent<Renderer>().material = pressedMaterial;
+            audioSource.clip = platePressSound;
+            audioSource.Play();
+            
             if (gunDoor != null)
             {
                 gunDoor.CheckPlates();

@@ -46,6 +46,11 @@ public class ASG1_PlayerBehaviour : MonoBehaviour
     [SerializeField]
     TextMeshProUGUI deathText;
 
+    [SerializeField]
+    AudioClip gunFireSound;
+
+    AudioSource audioSource;
+
 
     public int deathCount = 0;
     public float startTime = 0f;
@@ -103,6 +108,8 @@ public class ASG1_PlayerBehaviour : MonoBehaviour
 
         evidenceCountText.text = "Evidence Collected: " + score.ToString();
         wrenchCountText.text = "Wrench Collected: " + wrenchCount.ToString();
+
+        audioSource = GetComponent<AudioSource>();
     }
 
     void TeleportToSpawn()
@@ -568,5 +575,8 @@ public class ASG1_PlayerBehaviour : MonoBehaviour
         newProjectile.GetComponent<Rigidbody>().AddForce(fireForce);
 
         Destroy(newProjectile, 2f);
+
+        audioSource.clip = gunFireSound;
+        audioSource.Play();
     }
 }
