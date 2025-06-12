@@ -22,6 +22,7 @@ public class ASG1_DoorBehaviour : MonoBehaviour
     {
         if (isOpen) return;
 
+        // Check if the player is close enough to interact with the door
         Vector3 doorPos = transform.position;
         Vector3 playerPos = player.position;
 
@@ -32,7 +33,8 @@ public class ASG1_DoorBehaviour : MonoBehaviour
     }
 
     void OpenDoor(float angle)
-    {
+    {   
+        // Rotate the door around the pivot point
         transform.eulerAngles += new Vector3(0, angle, 0);
         isOpen = true;
         audioSource.clip = doorOpenSound;
@@ -40,7 +42,8 @@ public class ASG1_DoorBehaviour : MonoBehaviour
     }
 
     public void CloseDoor()
-    {
+    {   
+        // Close the door by resetting its rotation
         if (!isOpen) return;
         transform.eulerAngles = new Vector3(transform.eulerAngles.x, 0, transform.eulerAngles.z);
         isOpen = false;

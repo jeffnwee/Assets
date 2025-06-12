@@ -44,6 +44,7 @@ public class ASG1_CoinBehaviour : MonoBehaviour
 
     public void Collect(ASG1_PlayerBehaviour player)
     {
+        // Play the collection sound and modify the player's score
         AudioSource.PlayClipAtPoint(collectSound, transform.position);
         player.ModifyScore(coinValue);
         Destroy(gameObject);

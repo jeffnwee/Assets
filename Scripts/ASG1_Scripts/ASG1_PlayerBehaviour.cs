@@ -100,12 +100,14 @@ public class ASG1_PlayerBehaviour : MonoBehaviour
     Rigidbody rb;
 
     void Start()
-    {
+    {   
+        // Initialize player spawn position and components
         playerSpawn = transform.position;
         characterController = GetComponent<CharacterController>();
         rb = GetComponent<Rigidbody>();
         startTime = Time.time;
 
+        // Initialize UI texts
         evidenceCountText.text = "Evidence Collected: " + score.ToString();
         wrenchCountText.text = "Wrench Collected: " + wrenchCount.ToString();
 
@@ -113,7 +115,7 @@ public class ASG1_PlayerBehaviour : MonoBehaviour
     }
 
     void TeleportToSpawn()
-    {
+    {   
         if (characterController != null)
             characterController.enabled = false;
 
@@ -130,7 +132,8 @@ public class ASG1_PlayerBehaviour : MonoBehaviour
     }
 
     void Update()
-    {
+    {   
+        // Check for player input to interact with objects
         RaycastHit hitInfo;
         Debug.DrawRay(spawnPoint.position, spawnPoint.forward * interactionDistance, Color.red);
 
@@ -278,7 +281,8 @@ public class ASG1_PlayerBehaviour : MonoBehaviour
     void OnCollisionEnter(Collision collision)
     {
         if (collision.gameObject.CompareTag("HazardBall"))
-        {
+        {   
+            // Handle collision with hazard ball
             deathText.gameObject.SetActive(true);
             Invoke("HideDeathText", 2f);
             isDead = true;
@@ -357,12 +361,14 @@ public class ASG1_PlayerBehaviour : MonoBehaviour
     }
 
     public void ModifyScore(int amount)
-    {
+    {   
+        // Modify the score based on the amount collected
         score += amount;
         evidenceCountText.text = "Evidence Collected: " + score.ToString();
 
         if (score >= 5)
-        {
+        {   
+            // If enough evidence is collected, show the message and update UI
             enoughEvidenceText.gameObject.SetActive(true);
             Invoke("HideEnoughEvidenceText", 4f);
             evidenceCountText.gameObject.SetActive(false);
@@ -378,7 +384,8 @@ public class ASG1_PlayerBehaviour : MonoBehaviour
     }
 
     public void CollectKeycard()
-    {
+    {   
+        // Collect the keycard and update UI
         hasKeycard = true;
         keycardCollectedText.gameObject.SetActive(true);
         Invoke("HideKeycardCollectedText", 3f);
@@ -388,7 +395,8 @@ public class ASG1_PlayerBehaviour : MonoBehaviour
         gunBackground.gameObject.SetActive(true);
 
         if (stairsTrigger != null)
-        {
+        {   
+            // Check for keycard in stairs trigger
             stairsTrigger.CheckForKeycard();
         }
     }
@@ -399,7 +407,8 @@ public class ASG1_PlayerBehaviour : MonoBehaviour
     }
 
     public void CollectGun()
-    {
+    {   
+        // Collect the gun and update UI
         hasGun = true;
         gunCollectedText.gameObject.SetActive(true);
         Invoke("HideGunCollectedText", 4f);
@@ -415,7 +424,8 @@ public class ASG1_PlayerBehaviour : MonoBehaviour
     }
 
     public void CollectWrench(int wrenchAmount)
-    {
+    {   
+        // Collect the wrench and update UI
         wrenchCount += wrenchAmount;
         wrenchCountText.text = "Wrench Collected: " + wrenchCount.ToString();
     }
@@ -462,14 +472,15 @@ public class ASG1_PlayerBehaviour : MonoBehaviour
         if (other.CompareTag("Hazard"))
         {
 
-
+            // Handle hazard damage over time
             if (Time.time - lastHazardTime >= hazardCooldown)
             {
                 currentHealth -= hazardDamage;
                 lastHazardTime = Time.time;
 
                 if (currentHealth <= 0)
-                {
+                {   
+                    // Handle player death
                     currentHealth = 0;
                     isDead = true;
                     deathCount++;
@@ -566,7 +577,8 @@ public class ASG1_PlayerBehaviour : MonoBehaviour
     }
 
     void OnFire()
-    {
+    {   
+        // Fire the gun if the player has it
         if (!hasGun)
             return;
 

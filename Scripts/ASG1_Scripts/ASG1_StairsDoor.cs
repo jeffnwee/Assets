@@ -40,6 +40,7 @@ public class ASG1_StairsDoor : MonoBehaviour
     {
         if (isOpen) return;
 
+        // Check if the player has enough score to open the doors
         if (playerBehaviour != null && playerBehaviour.score >= 5)
         {
             Vector3 doorPos = transform.position;
@@ -64,7 +65,8 @@ public class ASG1_StairsDoor : MonoBehaviour
     }
 
     void OpenDoors(float leftAngle, float rightAngle)
-    {
+    {   
+        // Rotate the doors around their pivot points
         leftDoor.localEulerAngles = leftDoorClosedRotation + new Vector3(0, leftAngle, 0);
         rightDoor.localEulerAngles = rightDoorClosedRotation + new Vector3(0, rightAngle, 0);
         isOpen = true;
@@ -75,6 +77,8 @@ public class ASG1_StairsDoor : MonoBehaviour
     public void CloseDoors()
     {
         if (!isOpen) return;
+
+        // Reset the doors to their closed rotation
         leftDoor.localEulerAngles = leftDoorClosedRotation;
         rightDoor.localEulerAngles = rightDoorClosedRotation;
         isOpen = false;

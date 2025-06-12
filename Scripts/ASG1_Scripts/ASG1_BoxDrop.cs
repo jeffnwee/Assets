@@ -6,7 +6,9 @@ public class ASG1_BoxDrop : MonoBehaviour
     GameObject boxDrop;
 
     void OnCollisionEnter(Collision collision)
-    {
+    {   
+        // Check if the collision is with a projectile
+        // and if so, destroy the projectile, instantiate a box drop, and destroy this object
         if (collision.gameObject.CompareTag("Projectile"))
         {
             Destroy(collision.gameObject);

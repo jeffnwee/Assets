@@ -24,12 +24,13 @@ public class ASG1_Plate2 : MonoBehaviour
     private void OnTriggerEnter(Collider other)
     {
         if (other.CompareTag("Crates"))
-        {
+        {   
+            // Mark the plate as pressed and change its material
             plate2Pressed = true;
             GetComponent<Renderer>().material = pressedMaterial;
             audioSource.clip = platePressSound;
             audioSource.Play();
-            
+
             if (gunDoor != null)
             {
                 gunDoor.CheckPlates();

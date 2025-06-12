@@ -40,7 +40,8 @@ public class ASG1_GunBehaviour : MonoBehaviour
     }
 
     public void Collect(ASG1_PlayerBehaviour player)
-    {
+    {   
+        // Play the collection sound and give the player a gun
         AudioSource.PlayClipAtPoint(collectSound, transform.position);
         player.CollectGun();
         Destroy(gameObject);

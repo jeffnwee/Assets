@@ -36,9 +36,11 @@ public class ASG1_ExitDoor : MonoBehaviour
     public void Interact()
     {
         if (player != null)
-        {
+        {   
+            // Check if the player has fixed the power box      
             if (player.powerBoxFixed)
-            {
+            {   
+                // Stop the BGM
                 if (bgmAudioSource != null)
                 {
                     bgmAudioSource.Stop();
@@ -47,6 +49,7 @@ public class ASG1_ExitDoor : MonoBehaviour
                 audioSource.clip = victorySound;
                 audioSource.Play();
 
+                // Display the exit text and stats
                 float totalTime = Time.time - player.startTime;
                 int totalSeconds = (int)totalTime;
 

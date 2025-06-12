@@ -29,7 +29,8 @@ public class ASG1_GunDoor : MonoBehaviour
     }
 
     public void CheckPlates()
-    {
+    {   
+        // Check the state of the plates and update the UI accordingly
         if (plate1.plate1Pressed && plate2.plate2Pressed)
         {
             bothPressed.gameObject.SetActive(true);
@@ -45,6 +46,7 @@ public class ASG1_GunDoor : MonoBehaviour
     {
         if (isOpen) return;
 
+        // Check if both plates are pressed
         Vector3 doorPos = transform.position;
         Vector3 playerPos = player.position;
 
@@ -74,7 +76,8 @@ public class ASG1_GunDoor : MonoBehaviour
     }
 
     void OpenDoor(float angle)
-    {
+    {   
+        // Rotate the door around the pivot point
         transform.eulerAngles += new Vector3(0, angle, 0);
         isOpen = true;
         audioSource.clip = doorOpenSound;
@@ -84,6 +87,8 @@ public class ASG1_GunDoor : MonoBehaviour
     public void CloseDoor()
     {
         if (!isOpen) return;
+
+        // Close the door by resetting its rotation
         transform.eulerAngles = new Vector3(transform.eulerAngles.x, 0, transform.eulerAngles.z);
         isOpen = false;
         audioSource.clip = doorCloseSound;

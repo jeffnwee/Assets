@@ -26,7 +26,8 @@ public class ASG1_Keycard : MonoBehaviour
     }
 
     public void Collect(ASG1_PlayerBehaviour player)
-    {
+    {   
+        // Play the collection sound and give the player a keycard
         AudioSource.PlayClipAtPoint(collectSound, transform.position);
         player.CollectKeycard();
         Destroy(gameObject);

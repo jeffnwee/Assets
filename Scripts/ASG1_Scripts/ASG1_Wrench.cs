@@ -43,7 +43,8 @@ public class ASG1_Wrench : MonoBehaviour
     }
 
     public void Collect(ASG1_PlayerBehaviour player)
-    {
+    {   
+        // Play the collection sound and give the player a wrench
         AudioSource.PlayClipAtPoint(collectSound, transform.position);
         player.CollectWrench(wrenchValue);
         Destroy(gameObject);

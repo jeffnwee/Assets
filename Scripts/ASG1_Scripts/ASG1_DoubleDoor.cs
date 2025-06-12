@@ -31,6 +31,8 @@ public class ASG1_DoubleDoor : MonoBehaviour
     public void Start()
     {
         audioSource = GetComponent<AudioSource>();
+
+        // Store the initial closed rotation of the doors
         leftDoorClosedRotation = leftDoor.localEulerAngles;
         rightDoorClosedRotation = rightDoor.localEulerAngles;
     }
@@ -40,7 +42,8 @@ public class ASG1_DoubleDoor : MonoBehaviour
         if (isOpen) return;
 
         if (playerBehaviour != null && playerBehaviour.hasKeycard)
-        {
+        {   
+            // Check if the player is close enough to interact with the doors
             Vector3 doorPos = transform.position;
             Vector3 playerPos = player.position;
 
@@ -50,7 +53,8 @@ public class ASG1_DoubleDoor : MonoBehaviour
                 OpenDoors(-90, 90);
         }
         else
-        {
+        {   
+            // Show a message if the player does not have the keycard
             doubleDoorText.gameObject.SetActive(true);
             Invoke("HideDoubleDoorText", 2.5f);
         }
@@ -62,7 +66,8 @@ public class ASG1_DoubleDoor : MonoBehaviour
     }
 
     void OpenDoors(float leftAngle, float rightAngle)
-    {
+    {   
+        // Rotate the doors around their pivot points
         leftDoor.localEulerAngles = leftDoorClosedRotation + new Vector3(0, leftAngle, 0);
         rightDoor.localEulerAngles = rightDoorClosedRotation + new Vector3(0, rightAngle, 0);
         isOpen = true;
@@ -73,6 +78,8 @@ public class ASG1_DoubleDoor : MonoBehaviour
     public void CloseDoors()
     {
         if (!isOpen) return;
+
+        // Reset the doors to their closed rotation
         leftDoor.localEulerAngles = leftDoorClosedRotation;
         rightDoor.localEulerAngles = rightDoorClosedRotation;
         isOpen = false;

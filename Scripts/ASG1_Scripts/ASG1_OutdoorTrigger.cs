@@ -16,7 +16,8 @@ public class ASG1_OutdoorTrigger : MonoBehaviour
     private void OnTriggerEnter(Collider other)
     {
         if (other.CompareTag("Player"))
-        {
+        {   
+            // Check if both plates are not pressed
             if (!plate1.plate1Pressed && !plate2.plate2Pressed)
             {
                 outdoorHint.gameObject.SetActive(true);
@@ -26,7 +27,8 @@ public class ASG1_OutdoorTrigger : MonoBehaviour
     }
 
     public void CheckPlatesAndHideHint()
-    {
+    {   
+        // Hide the hint if both plates are pressed
         if (plate1 != null && plate2 != null && plate1.plate1Pressed && plate2.plate2Pressed)
         {
             outdoorHint.gameObject.SetActive(false);

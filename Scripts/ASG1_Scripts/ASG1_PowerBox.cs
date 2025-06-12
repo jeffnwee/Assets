@@ -54,7 +54,8 @@ public class ASG1_PowerBox : MonoBehaviour
     }
 
     public void Interact()
-    {
+    {   
+        // Check if the player has enough wrenches to fix the power box
         if (player != null && player.wrenchCount >= 3 && !player.powerBoxFixed)
         {
             AudioSource.PlayClipAtPoint(fixSound, transform.position);

@@ -15,7 +15,8 @@ public class ASG1_StairsTrigger : MonoBehaviour
     private void OnTriggerEnter(Collider other)
     {
         if (other.CompareTag("Player"))
-        {
+        {   
+            // Show the stairs hint if the player does not have a keycard
             if (!playerBehaviour.hasKeycard)
             {
                 stairsHint.gameObject.SetActive(true);
@@ -25,7 +26,8 @@ public class ASG1_StairsTrigger : MonoBehaviour
     }
 
     public void CheckForKeycard()
-    {
+    {   
+        // Hide the stairs hint and background if the player has a keycard
         if (playerBehaviour.hasKeycard)
         {
             stairsHint.gameObject.SetActive(false);
