@@ -6,11 +6,11 @@ Lastly, be careful as there are hazards that can kill you!
 
 ## Controls
 
-WASD - Move
-E - Interact
-Shift - Sprint
-Space - Jump
-F - Fire ( Upon obtaining gun )
+- WASD - Move
+- E - Interact
+- Shift - Sprint
+- Space - Jump
+- F - Fire ( Upon obtaining gun )
 
 ## Requirements
 
