@@ -2,19 +2,34 @@ using UnityEngine;
 
 public class ASG1_DoorBehaviour : MonoBehaviour
 {
+    /*
+    * Author: Jeffrey Ang
+    * Date: 8 June 2025
+    * Description: This script handles the door object in the game.
+    * It allows the player to interact with the door to open or close it,
+    * plays sounds when the door is opened or closed, and automatically closes
+    * when the player exits the trigger area.
+    */
+    
     public bool isOpen = false;
+    // Boolean to track if the door is currently open
     public Transform player;
+    // Reference to the player transform for interaction
     
     [SerializeField]
     private AudioClip doorOpenSound;
+    // Sound to play when the door opens
 
     [SerializeField]
     private AudioClip doorCloseSound;
+    // Sound to play when the door closes
 
     private AudioSource audioSource;
+    // AudioSource component to play sounds
 
     public void Start()
-    {
+    {   
+        // Initialize the AudioSource component
         audioSource = GetComponent<AudioSource>();
     }
 
@@ -52,7 +67,8 @@ public class ASG1_DoorBehaviour : MonoBehaviour
     }
 
     void OnTriggerExit(Collider other)
-    {
+    {   
+        // Automatically close the door when the player exits the trigger area
         if (other.CompareTag("Player") && isOpen)
         {
             CloseDoor();

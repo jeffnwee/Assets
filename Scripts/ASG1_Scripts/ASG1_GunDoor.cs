@@ -3,25 +3,43 @@ using TMPro;
 
 public class ASG1_GunDoor : MonoBehaviour
 {
+    /*
+    * Author: Jeffrey Ang
+    * Date: 11 June 2025
+    * Description: This script handles the gun door in the game.
+    * It allows the player to open the door if both plates are pressed,
+    * plays a sound when the door opens or closes, and displays messages
+    * when the plates are not pressed or both are pressed.
+    */
+    
     [SerializeField]
     TextMeshProUGUI notPressed;
+    // Message displayed when the plates are not pressed
 
     [SerializeField]
     TextMeshProUGUI bothPressed;
+    // Message displayed when both plates are pressed
 
     public ASG1_Plate1 plate1;
+    // Reference to the first plate script
     public ASG1_Plate2 plate2;
+    // Reference to the second plate script
 
     public bool isOpen = false;
+    // Indicates whether the door is currently open
     public Transform player;
+    // Reference to the player transform
     
     [SerializeField]
     private AudioClip doorOpenSound;
+    // Sound to play when the door opens
 
     [SerializeField]
     private AudioClip doorCloseSound;
+    // Sound to play when the door closes
 
     private AudioSource audioSource;
+    // AudioSource component to play sounds
 
     public void Start()
     {
@@ -66,12 +84,14 @@ public class ASG1_GunDoor : MonoBehaviour
     }
 
     private void HideNotPressedText()
-    {
+    {   
+        // Hide the not pressed message after a delay
         notPressed.gameObject.SetActive(false);
     }
     
     private void HideBothPressedText()
-    {
+    {   
+        // Hide the both pressed message after a delay
         bothPressed.gameObject.SetActive(false);
     }
 
@@ -96,7 +116,8 @@ public class ASG1_GunDoor : MonoBehaviour
     }
 
     void OnTriggerExit(Collider other)
-    {
+    {   
+        // Automatically close the door when the player exits the trigger area
         if (other.CompareTag("Player") && isOpen)
         {
             CloseDoor();

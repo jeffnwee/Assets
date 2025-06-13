@@ -4,100 +4,157 @@ using UnityEngine.UI;
 
 public class ASG1_PlayerBehaviour : MonoBehaviour
 {
+    /*
+    * Author: Jeffrey Ang
+    * Date: 8 June 2025
+    * Description: This script handles the player character's behavior in the game.
+    * It manages player interactions, health, score, and collectibles.
+    * The player can collect evidence, keycards, guns, and wrenches, interact with doors,  
+    * and handle hazards. The player can also teleport to a spawn point upon death.
+    */
+
     [SerializeField]
     TextMeshProUGUI evidenceCountText;
+    // Text to display the number of evidence collected
 
     [SerializeField]
     TextMeshProUGUI interactText;
+    // Text to display when the player can interact with an object
 
     [SerializeField]
     TextMeshProUGUI enoughEvidenceText;
+    // Text to display when the player has enough evidence to open the stairs door
 
     [SerializeField]
     TextMeshProUGUI keycardCollectedText;
+    // Text to display when the player collects a keycard
 
     [SerializeField]
     TextMeshProUGUI gunCollectedText;
+    // Text to display when the player collects a gun
 
     [SerializeField]
     TextMeshProUGUI collectibleInteractText;
+    // Text to display when the player can interact with a collectible
 
     [SerializeField]
     TextMeshProUGUI wrenchCountText;
+    // Text to display the number of wrenches collected
 
     [SerializeField]
     Image evidenceBackground;
+    // Background image for the evidence count text
 
     [SerializeField]
     Image wrenchBackground;
+    // Background image for the wrench count text
 
     [SerializeField]
     TextMeshProUGUI keycardText;
+    // Text to display when the player has collected enough evidence for a keycard
 
     [SerializeField]
     Image keycardBackground;
+    // Background image for the keycard text
 
     [SerializeField]
     TextMeshProUGUI gunText;
+    // Text to display when the player has collected a gun
 
     [SerializeField]
     Image gunBackground;
+    // Background image for the gun text
 
     [SerializeField]
     TextMeshProUGUI deathText;
+    // Text to display when the player dies
 
     [SerializeField]
     AudioClip gunFireSound;
+    // Sound to play when the player fires the gun
 
     AudioSource audioSource;
+    // AudioSource component to play sounds
 
 
     public int deathCount = 0;
+    // Counter for the number of times the player has died
     public float startTime = 0f;
+    // Time when the game started
     int maxHealth = 100;
+    // Maximum health of the player
     int currentHealth = 100;
+    // Current health of the player
     bool isDead = false;
+    // Boolean to check if the player is dead
 
-    int hazardDamage = 20; // Damage taken from hazards
+    int hazardDamage = 20;
+    // Damage taken from hazards
     float lastHazardTime = 0f;
-    float hazardCooldown = 0.2f; // Damage once every second
+    // Last time the player took damage from a hazard
+    float hazardCooldown = 0.2f;
+    // Damage once every 0.2s
 
     Vector3 playerSpawn;
+    // Player spawn position
 
     bool canInteract = false;
+    // Boolean to check if the player can interact with objects
     public int score = 0;
+    // Amount of evidence collected by the player
     public int wrenchCount = 0;
+    // Amount of wrenches collected by the player
 
     [SerializeField]
     GameObject projectile;
+    // Projectile prefab for the gun
 
     [SerializeField]
     float fireStrength = 0f;
+    // Strength of the projectile when fired
 
     [SerializeField]
     Transform spawnPoint;
+    // Spawn point for the projectile
 
     [SerializeField]
     float interactionDistance = 5f;
+    // Distance within which the player can interact with objects
 
     ASG1_CoinBehaviour currentCoin;
+    // Current evidence collectible the player is interacting with
     ASG1_DoorBehaviour currentDoor;
+    // Current door the player is interacting with
     ASG1_DoubleDoor currentDoubleDoor;
+    // Current double door the player is interacting with
     ASG1_StairsDoor currentStairsDoor;
+    // Current stairs door the player is interacting with
     public bool hasKeycard = false;
+    // Boolean to check if the player has collected a keycard
     ASG1_Keycard currentKeycard;
+    // Current keycard the player is interacting with
     public bool hasGun = false;
+    // Boolean to check if the player has collected a gun
     ASG1_GunBehaviour currentGun;
+    // Current gun the player is interacting with
     ASG1_Wrench currentWrench;
+    // Current wrench the player is interacting with
     public bool powerBoxFixed = false;
+    // Boolean to check if the power box has been fixed
     ASG1_PowerBox currentPowerBox;
+    // Current power box the player is interacting with
     ASG1_ExitDoor currentExitDoor;
+    // Current exit door the player is interacting with
 
     ASG1_GunDoor currentGunDoor;
+    // Current gun door the player is interacting with
     public ASG1_StairsTrigger stairsTrigger;
+    // Reference to the stairs trigger to check for keycard
 
     CharacterController characterController;
+    // CharacterController component for player movement
     Rigidbody rb;
+    // Rigidbody component for player physics
 
     void Start()
     {   
@@ -116,6 +173,7 @@ public class ASG1_PlayerBehaviour : MonoBehaviour
 
     void TeleportToSpawn()
     {   
+        // Teleport the player to the spawn position
         if (characterController != null)
             characterController.enabled = false;
 
@@ -288,7 +346,8 @@ public class ASG1_PlayerBehaviour : MonoBehaviour
             isDead = true;
             deathCount++;
             if (isDead)
-            {
+            {   
+                // Teleport the player to the spawn point upon death
                 TeleportToSpawn();
             }
             currentHealth = maxHealth;
@@ -379,7 +438,8 @@ public class ASG1_PlayerBehaviour : MonoBehaviour
         }
     }
     void HideEnoughEvidenceText()
-    {
+    {   
+        // Hide the enough evidence text after a delay
         enoughEvidenceText.gameObject.SetActive(false);
     }
 
@@ -402,7 +462,8 @@ public class ASG1_PlayerBehaviour : MonoBehaviour
     }
 
     void HideKeycardCollectedText()
-    {
+    {   
+        // Hide the keycard collected text after a delay
         keycardCollectedText.gameObject.SetActive(false);
     }
 
@@ -420,6 +481,7 @@ public class ASG1_PlayerBehaviour : MonoBehaviour
 
     void HideGunCollectedText()
     {
+        // Hide the gun collected text after a delay
         gunCollectedText.gameObject.SetActive(false);
     }
 
@@ -488,7 +550,8 @@ public class ASG1_PlayerBehaviour : MonoBehaviour
                     Invoke("HideDeathText", 2f);
 
                     if (isDead)
-                    {
+                    {   
+                        // Teleport the player to the spawn point upon death
                         TeleportToSpawn();
                     }
 
@@ -500,7 +563,8 @@ public class ASG1_PlayerBehaviour : MonoBehaviour
     }
 
     void HideDeathText()
-    {
+    {   
+        // Hide the death text after a delay
         deathText.gameObject.SetActive(false);
     }
 
