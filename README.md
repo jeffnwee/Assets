@@ -34,6 +34,26 @@ There isn't really a requirement to run my application, but these are what I cre
 - Doors Pushing the Player
     - Since the doors have colliders, they might push the player when closing automatically, especially if the player is still near. This can result in the player being pushed or even flung.
 
+## Game Puzzles
+
+- Pink Chemical
+    - Push the crates to move the hazard ball away and to reach for the elevated shelf, where the pink collectible is placed.
+
+- Green Chemical
+    - Hidden behind the bunch of crates.
+
+- Red Chemical
+    - Just walk straight and keep turning left to find the red collectible.
+
+- Pressure Plates
+    - Push the crates onto the glowing red pressure plates. ( Will turn green when activated. )
+
+- Keycard
+    - Hidden beside the bed in the most upper left room when coming up from the stairs.
+
+- Wrenches
+    - The 3 boxes nearest to the exit door has the wrench in them.
+
 ## References / Credits
 
 I used ChatGPT and GitHub CoPilot to make some of my codes work.
